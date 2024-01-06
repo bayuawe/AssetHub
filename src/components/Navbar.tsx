@@ -2,7 +2,10 @@ import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { Icons } from "./ui/icons";
 import NavItems from "./NavItems";
+import { buttonVariants } from "./ui/button";
+import { Carter_One } from "next/font/google";
 
+const user = null;
 const Navbar = () => {
   return (
     <div className="bg-white sticky z-50 top-0 inset-x-0 h-16">
@@ -20,6 +23,18 @@ const Navbar = () => {
 
               <div className="hidden z-50 lg:ml-8 lg:block lg:self-strech">
                 <NavItems />
+              </div>
+
+              <div className="ml-auto flex items-center">
+                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">{user ? null : (<Link href="/sign-in" className={buttonVariants({ variant: "ghost" })}>Sign In</Link>)}
+                
+                  {user ? null : (<span className="h-6 w-px bg-gray-200" aria-hidden="true" />)}
+                  {user ? (<p></p>) : (<Link href="/sign-up" className={buttonVariants({ variant: "ghost" })}>Create Account</Link>)}
+                  
+                  {user ? <span className="h-6 w-px bg-gray-200"></span> : null}
+
+                  {user ? null : (<div className="flex lg:ml-6"><span className="h-6 w-px bg-gray-200"></span></div>)}
+                </div>
               </div>
             </div>
           </div>
