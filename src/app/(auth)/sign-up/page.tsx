@@ -8,9 +8,14 @@ import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowRightFromLineIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthCredentialsValidator, TAuthCredentialsValidator } from "@/lib/validators/account-credentials-validator";
+
+import {
+  AuthCredentialsValidator,
+  TAuthCredentialsValidator,
+} from "@/lib/validators/account-credentials-validator";
 
 import Link from "next/link";
+import { trpc } from "@/trpc/client";
 
 const Page = () => {
   const {
@@ -21,8 +26,10 @@ const Page = () => {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({});
+
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
-    // Send data to Server
+    mutate({ email, password });
   };
 
   return (
@@ -33,7 +40,13 @@ const Page = () => {
             <Icons.logo className="h-20 w-20" />
             <h1 className="text-2xl font-bold">Create an account</h1>
 
-            <Link className={buttonVariants({ variant: "link", className: "gap-1.5" })} href="/sing-in">
+            <Link
+              className={buttonVariants({
+                variant: "link",
+                className: "gap-1.5",
+              })}
+              href="/sing-in"
+            >
               Already have an account? Sign in
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -57,6 +70,7 @@ const Page = () => {
                   <Label htmlFor="password">Password</Label>
                   <Input
                     {...register("password")}
+                    type="password"
                     className={cn({
                       "focus-visible:ring-red-500": errors.password,
                     })}
