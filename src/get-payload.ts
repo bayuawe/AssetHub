@@ -3,9 +3,20 @@ import path from "path";
 import payload from "payload";
 import type { InitOptions } from "payload/config";
 import { Payload } from "payload/dist/payload";
+import nodemailer from "nodemailer";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
+});
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.resend.com",
+  secure: true,
+  port: 465,
+  auth: {
+    user: "resend",
+    pass: process.env.RESEND_API_KEY,
+  },
 });
 
 let cached = (global as any).payload;
@@ -21,9 +32,7 @@ interface Args {
   initOptions?: Partial<InitOptions>;
 }
 
-export const getPayloadClient = async ({
-  initOptions,
-}: Args = {}): Promise<Payload> => {
+export const getPayloadClient = async ({ initOptions }: Args = {}): Promise<Payload> => {
   if (!process.env.PAYLOAD_SECRET) {
     throw new Error("PAYLOAD_SECRET is missing");
   }
@@ -34,6 +43,11 @@ export const getPayloadClient = async ({
 
   if (!cached.promise) {
     cached.promise = payload.init({
+      email: {
+        transport: transporter,
+        fromAddress: "200401081@student.umri.ac.id",
+        fromName: "saripasundan",
+      },
       secret: process.env.PAYLOAD_SECRET,
       local: initOptions?.express ? false : true,
       ...(initOptions || {}),
