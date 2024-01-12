@@ -13,14 +13,14 @@ export interface Config {
     media: Media;
     product_files: ProductFile;
     orders: Order;
-    "payload-preferences": PayloadPreference;
-    "payload-migrations": PayloadMigration;
+    'payload-preferences': PayloadPreference;
+    'payload-migrations': PayloadMigration;
   };
   globals: {};
 }
 export interface User {
   id: string;
-  role: "admin" | "user";
+  role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -35,14 +35,14 @@ export interface User {
   password: string | null;
 }
 export interface Product {
-  product_files: any;
   id: string;
   user?: (string | null) | User;
   name: string;
   description?: string | null;
   price: number;
-  category: "ui_kits" | "icons";
-  approvedForSale?: ("pending" | "approved" | "denied") | null;
+  category: 'ui_kits' | 'icons';
+  product_files: string | ProductFile;
+  approvedForSale?: ('pending' | 'approved' | 'denied') | null;
   priceId?: string | null;
   stripeId?: string | null;
   images: {
@@ -51,6 +51,18 @@ export interface Product {
   }[];
   updatedAt: string;
   createdAt: string;
+}
+export interface ProductFile {
+  id: string;
+  user?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
 }
 export interface Media {
   id: string;
@@ -90,18 +102,6 @@ export interface Media {
     };
   };
 }
-export interface ProductFile {
-  id: string;
-  user?: (string | null) | User;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-}
 export interface Order {
   id: string;
   _isPaid: boolean;
@@ -113,7 +113,7 @@ export interface Order {
 export interface PayloadPreference {
   id: string;
   user: {
-    relationTo: "users";
+    relationTo: 'users';
     value: string | User;
   };
   key?: string | null;
@@ -137,6 +137,7 @@ export interface PayloadMigration {
   createdAt: string;
 }
 
-declare module "payload" {
+
+declare module 'payload' {
   export interface GeneratedTypes extends Config {}
 }
