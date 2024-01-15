@@ -16,10 +16,10 @@ export function formatPrice(
 
   const numericPrice = typeof price === "string" ? parseFloat(price) : price;
 
-  return Intl.NumberFormat("en-US", {
+  return Intl.NumberFormat("id-ID", {
     style: "currency",
     currency,
     notation,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 6,
   }).format(numericPrice);
 }
